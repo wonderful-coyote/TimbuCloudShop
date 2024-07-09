@@ -1,5 +1,5 @@
 //ProductPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaHeart, FaStar, FaShoppingCart, FaTruck, FaThumbsUp } from 'react-icons/fa';
 import Header from './Header';
@@ -7,6 +7,14 @@ import Footer from './Footer';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useCart } from './CartContext';
+
+const ScrollToTopOnMount = ({ children }) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return children;
+};
 
 const ProductPage = () => {
   const location = useLocation();
@@ -142,232 +150,235 @@ const ProductPage = () => {
   
 
   return (
-    <div>
-      <ToastContainer />
-      <Header />
-       
-
-
-        <main className="p-5 max-w-7xl mx-auto">
-        <button 
-          onClick={handleBackClick} 
-          className="bg-gray-200 p-2 rounded hover:bg-gray-300"
-        >
-          Back
-        </button>
-        <div className="container mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-
-          {/* Frame 1: Product Image and Reviews */}
-          <div className="col-span-1 md:col-span-1">
-            {/* Main Product Image */}
-            <div className="mb-8 relative">
-              <img src={product.src} alt={product.title} className="w-full rounded-lg shadow-md" />
-            </div>
-
-            {/* Additional Images Container */}
-            <div className="flex space-x-2" style={{ maxWidth: "100%" }}>
-              {[1, 2, 3].map((index) => (
-                <img key={index} src={product.src} alt={`Product Thumbnail ${index}`} className="w-1/3 rounded-lg shadow-md" />
-              ))}
-            </div>
-
-            {/* Customer Reviews */}
-            <div className="mt-12">
-              <h3 className="text-xl font-semibold mb-4">Customer Reviews</h3>
-              {reviews.map((review, index) => (
-                <div key={index} className="mb-4 p-4 rounded-lg shadow-md bg-gray-100">
-                  <div className="flex items-center mb-2">
-                    <span className="text-gray-800 font-semibold">{review.user}</span>
-                  </div>
-
-                  <div className="flex items-center mb-2">
-                    {/* Star Ratings */}
-                    <div className="flex items-center">
-                      <FaStar className="text-yellow-500 mr-1" />
-                      <FaStar className="text-yellow-500 mr-1" />
-                      <FaStar className="text-yellow-500 mr-1" />
-                      <FaStar className="text-yellow-500 mr-1" />
-                      <FaStar className="text-yellow-500 mr-1" />
-                    </div>
-                    <span className="text-gray-500 ml-4">{review.date}</span>
-                  </div>
-
-                  <div className="flex justify-between items-start">
-                    <p className="text-gray-700 flex-grow">{review.review}</p>
-                    <div className="self-start">
-                      <FaThumbsUp className="text-gray-500 ml-4 text-xl" />
-                    </div>
-                  </div>
-
-
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Frame 2: Product Title, Price, and Reviews */}
-          <div className="col-span-1 md:col-span-1 space-y-8">
-            <div className="flex items-center">
-              <div className="flex-1">
-                <h2 className="text-2xl font-semibold">{product.title}</h2>
-              </div>
-
-            </div>
-
-            <div className="flex items-center">
-              {[...Array(5)].map((_, index) => (
-                <FaStar key={index} className={`text-yellow-400 ${index >= 4 ? 'text-gray-300' : ''}`} />
-              ))}
-              <span className="text-sm text-gray-500 ml-2">{product.reviews} Reviews</span>
-            </div>
-
-            <div>
-              <span className="text-xl font-semibold">${product.price}</span>
-              <span className="text-sm text-gray-500 ml-2">Available in Stock</span>
-            </div>
-
-
-            {/* Choose a Color */}
-            <div className="mb-6">
-              <h2 className="text-xl font-bold mb-2">Choose a Color</h2>
-              <div className="flex flex-wrap gap-2">
-                {['red', 'blue', 'yellow', 'green'].map((color, index) => (
-                  <div
-                    key={index}
-                    className={`w-12 h-12 rounded-lg shadow-md cursor-pointer border-2 transition-colors duration-200`}
-                    style={{
-                      borderColor: selectedColor === color ? color : 'transparent',
-                    }}
-                    onClick={() => setSelectedColor(color)}
-                  >
-                    <img
-                      src={product.src}
-                      alt={`${product.title} in ${color}`}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Sizes */}
-            <div className="mb-6">
-              <h2 className="text-xl font-bold mb-2">Sizes</h2>
-              <div className="flex flex-wrap gap-2">
-                {[40, 41, 42, 43, 44, 45, 46, '46.5', 47, 48, 49, 50].map((size, index) => (
-                  <button
-                    key={index}
-                    className={`bg-gray-200 text-gray-800 px-3 py-1 rounded-md shadow-md hover:bg-gray-300 transition-colors duration-200 ${
-                      selectedSize === size ? 'text-black' : ''
-                    }`}
-                    style={{
-                      backgroundColor: selectedSize === size ? selectedColor || 'gray' : '',
-                      borderColor: selectedSize === size ? selectedColor || 'gray' : 'transparent',
-                      borderWidth: '2px',
-                      borderStyle: 'solid',
-                    }}
-                    onClick={() => setSelectedSize(size)}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Add to Cart and Favorite Button */}
-            <div className="flex space-x-4 mb-8">
-              <button
-                onClick={handleAddToCart}
-                className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
-              >
-                <FaShoppingCart className="mr-2" />
-                Add to Cart
-              </button>
-              <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded-full shadow-md hover:bg-gray-300">
-                <FaHeart className="text-gray-600" />
-              </button>
-            </div>
-
-            {/* Free Delivery */}
-            <div className="mb-8 flex items-center space-x-2">
-              <FaTruck className="text-gray-600 text-2xl" />
-              <p className="text-gray-600">Free delivery for orders over $100</p>
-            </div>
+     <ScrollToTopOnMount> 
+       <div>
+         <ToastContainer />
+         <Header />
 
 
 
-            {/* Product Description */}
-            <div>
-              <h3 className="text-xl font-semibold mb-2">Product Description</h3>
-              <p className="text-gray-700">{productDescription}</p>
-            </div>
+           <main className="p-5 max-w-7xl mx-auto">
+           <button 
+             onClick={handleBackClick} 
+             className="bg-gray-200 p-2 rounded hover:bg-gray-300"
+           >
+             Back
+           </button>
+           <div className="container mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
 
-            {/* Frame 3: Product Features */}
-            <div className="mt-12">
-              <h3 className="text-xl font-semibold mb-4">Product Features</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <ul className="list-disc list-inside">
-                    {detailsColumn1.map((detail, index) => (
-                      <li key={index} className="text-gray-700">{detail}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <ul className="list-disc list-inside">
-                    {detailsColumn2.map((detail, index) => (
-                      <li key={index} className="text-gray-700">{detail}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+             {/* Frame 1: Product Image and Reviews */}
+             <div className="col-span-1 md:col-span-1">
+               {/* Main Product Image */}
+               <div className="mb-8 relative">
+                 <img src={product.src} alt={product.title} className="w-full rounded-lg shadow-md" />
+               </div>
 
+               {/* Additional Images Container */}
+               <div className="flex space-x-2" style={{ maxWidth: "100%" }}>
+                 {[1, 2, 3].map((index) => (
+                   <img key={index} src={product.src} alt={`Product Thumbnail ${index}`} className="w-1/3 rounded-lg shadow-md" />
+                 ))}
+               </div>
 
-        </div>
+               {/* Customer Reviews */}
+               <div className="mt-12">
+                 <h3 className="text-xl font-semibold mb-4">Customer Reviews</h3>
+                 {reviews.map((review, index) => (
+                   <div key={index} className="mb-4 p-4 rounded-lg shadow-md bg-gray-100">
+                     <div className="flex items-center mb-2">
+                       <span className="text-gray-800 font-semibold">{review.user}</span>
+                     </div>
 
+                     <div className="flex items-center mb-2">
+                       {/* Star Ratings */}
+                       <div className="flex items-center">
+                         <FaStar className="text-yellow-500 mr-1" />
+                         <FaStar className="text-yellow-500 mr-1" />
+                         <FaStar className="text-yellow-500 mr-1" />
+                         <FaStar className="text-yellow-500 mr-1" />
+                         <FaStar className="text-yellow-500 mr-1" />
+                       </div>
+                       <span className="text-gray-500 ml-4">{review.date}</span>
+                     </div>
 
-
-        {/* Frame 5: Other Products */}
-        <section className="mt-10 bg-white p-5 sm:p-10 rounded-lg shadow-md overflow-hidden">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">Similar items you might like</h2>
-          <div className="flex overflow-x-auto pb-4 lg:pb-0 lg:grid lg:grid-cols-3 gap-4">
-            {selectedProducts.map((product) => (
-              <div key={product.id} className="flex-shrink-0 w-64 sm:w-72 lg:w-full cursor-pointer" onClick={() => handleImageClick(product)}>
-                <div className="relative">
-                  <img src={product.src} alt={product.title} className="w-full h-auto rounded-lg" />
-                  <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
-                    <FaHeart className="text-gray-600" />
-                  </button>
-                </div>
-                <div className="mt-2 flex justify-between">
-                  <div className="text-left">
-                    <h3 className="text-lg font-bold">{product.title}</h3>
-                    <div className="flex items-center text-xs space-x-2">
-                      <p className="text-gray-600">${product.price}</p>
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <FaStar key={i} className="text-yellow-500 w-3 h-3" />
-                        ))}
-                      </div>
-                      <span className="text-gray-600">({product.reviews} reviews)</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center">
-                    <FaShoppingCart className="text-gray-600 text-xl cursor-pointer" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+                     <div className="flex justify-between items-start">
+                       <p className="text-gray-700 flex-grow">{review.review}</p>
+                       <div className="self-start">
+                         <FaThumbsUp className="text-gray-500 ml-4 text-xl" />
+                       </div>
+                     </div>
 
 
-      </main>
+                   </div>
+                 ))}
+               </div>
+             </div>
 
-      <Footer />
-    </div>
+             {/* Frame 2: Product Title, Price, and Reviews */}
+             <div className="col-span-1 md:col-span-1 space-y-8">
+               <div className="flex items-center">
+                 <div className="flex-1">
+                   <h2 className="text-2xl font-semibold">{product.title}</h2>
+                 </div>
+
+               </div>
+
+               <div className="flex items-center">
+                 {[...Array(5)].map((_, index) => (
+                   <FaStar key={index} className={`text-yellow-400 ${index >= 4 ? 'text-gray-300' : ''}`} />
+                 ))}
+                 <span className="text-sm text-gray-500 ml-2">{product.reviews} Reviews</span>
+               </div>
+
+               <div>
+                 <span className="text-xl font-semibold">${product.price}</span>
+                 <span className="text-sm text-gray-500 ml-2">Available in Stock</span>
+               </div>
+
+
+               {/* Choose a Color */}
+               <div className="mb-6">
+                 <h2 className="text-xl font-bold mb-2">Choose a Color</h2>
+                 <div className="flex flex-wrap gap-2">
+                   {['red', 'blue', 'yellow', 'green'].map((color, index) => (
+                     <div
+                       key={index}
+                       className={`w-12 h-12 rounded-lg shadow-md cursor-pointer border-2 transition-colors duration-200`}
+                       style={{
+                         borderColor: selectedColor === color ? color : 'transparent',
+                       }}
+                       onClick={() => setSelectedColor(color)}
+                     >
+                       <img
+                         src={product.src}
+                         alt={`${product.title} in ${color}`}
+                         className="w-full h-full object-cover rounded-lg"
+                       />
+                     </div>
+                   ))}
+                 </div>
+               </div>
+
+               {/* Sizes */}
+               <div className="mb-6">
+                 <h2 className="text-xl font-bold mb-2">Sizes</h2>
+                 <div className="flex flex-wrap gap-2">
+                   {[40, 41, 42, 43, 44, 45, 46, '46.5', 47, 48, 49, 50].map((size, index) => (
+                     <button
+                       key={index}
+                       className={`bg-gray-200 text-gray-800 px-3 py-1 rounded-md shadow-md hover:bg-gray-300 transition-colors duration-200 ${
+                         selectedSize === size ? 'text-black' : ''
+                       }`}
+                       style={{
+                         backgroundColor: selectedSize === size ? selectedColor || 'gray' : '',
+                         borderColor: selectedSize === size ? selectedColor || 'gray' : 'transparent',
+                         borderWidth: '2px',
+                         borderStyle: 'solid',
+                       }}
+                       onClick={() => setSelectedSize(size)}
+                     >
+                       {size}
+                     </button>
+                   ))}
+                 </div>
+               </div>
+
+               {/* Add to Cart and Favorite Button */}
+               <div className="flex space-x-4 mb-8">
+                 <button
+                   onClick={handleAddToCart}
+                   className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
+                 >
+                   <FaShoppingCart className="mr-2" />
+                   Add to Cart
+                 </button>
+                 <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded-full shadow-md hover:bg-gray-300">
+                   <FaHeart className="text-gray-600" />
+                 </button>
+               </div>
+
+               {/* Free Delivery */}
+               <div className="mb-8 flex items-center space-x-2">
+                 <FaTruck className="text-gray-600 text-2xl" />
+                 <p className="text-gray-600">Free delivery for orders over $100</p>
+               </div>
+
+
+
+               {/* Product Description */}
+               <div>
+                 <h3 className="text-xl font-semibold mb-2">Product Description</h3>
+                 <p className="text-gray-700">{productDescription}</p>
+               </div>
+
+               {/* Frame 3: Product Features */}
+               <div className="mt-12">
+                 <h3 className="text-xl font-semibold mb-4">Product Features</h3>
+                 <div className="grid grid-cols-2 gap-4">
+                   <div>
+                     <ul className="list-disc list-inside">
+                       {detailsColumn1.map((detail, index) => (
+                         <li key={index} className="text-gray-700">{detail}</li>
+                       ))}
+                     </ul>
+                   </div>
+                   <div>
+                     <ul className="list-disc list-inside">
+                       {detailsColumn2.map((detail, index) => (
+                         <li key={index} className="text-gray-700">{detail}</li>
+                       ))}
+                     </ul>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+
+           </div>
+
+
+
+           {/* Frame 5: Other Products */}
+           <section className="mt-10 bg-white p-5 sm:p-10 rounded-lg shadow-md overflow-hidden">
+             <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">Similar items you might like</h2>
+             <div className="flex overflow-x-auto pb-4 lg:pb-0 lg:grid lg:grid-cols-3 gap-4">
+               {selectedProducts.map((product) => (
+                 <div key={product.id} className="flex-shrink-0 w-64 sm:w-72 lg:w-full cursor-pointer" onClick={() => handleImageClick(product)}>
+                   <div className="relative">
+                     <img src={product.src} alt={product.title} className="w-full h-auto rounded-lg" />
+                     <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
+                       <FaHeart className="text-gray-600" />
+                     </button>
+                   </div>
+                   <div className="mt-2 flex justify-between">
+                     <div className="text-left">
+                       <h3 className="text-lg font-bold">{product.title}</h3>
+                       <div className="flex items-center text-xs space-x-2">
+                         <p className="text-gray-600">${product.price}</p>
+                         <div className="flex">
+                           {[...Array(5)].map((_, i) => (
+                             <FaStar key={i} className="text-yellow-500 w-3 h-3" />
+                           ))}
+                         </div>
+                         <span className="text-gray-600">({product.reviews} reviews)</span>
+                       </div>
+                     </div>
+                     <div className="flex items-center">
+                       <FaShoppingCart className="text-gray-600 text-xl cursor-pointer" />
+                     </div>
+                   </div>
+                 </div>
+               ))}
+             </div>
+           </section>
+
+
+         </main>
+
+         <Footer />
+       </div>
+     </ScrollToTopOnMount>
+    
   );
 };
 
