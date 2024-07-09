@@ -106,7 +106,7 @@ const Main = () => {
           <p className="mt-4 text-gray-600">Don't miss out on our incredible 'Buy One, Get One Free' offer! Double your style and savings with this limited-time deal</p>
           <button className="mt-6 px-6 py-2 bg-black text-white rounded-full">Buy now</button>
         </div>
-        <img src="src/timbu/adbb9d9b9c2b5d72c5c9d2c28d23e0cd8bb747a7.png" alt="Promo" className="w-96 h-auto" />
+        <img src="./timbu/adbb9d9b9c2b5d72c5c9d2c28d23e0cd8bb747a7.png" alt="Promo" className="w-96 h-auto" />
       </section>
 
 
@@ -116,12 +116,12 @@ const Main = () => {
           <div className="flex overflow-x-auto pb-4 lg:pb-0 lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-4">
             {[
 
-              { id: 1, src: "src/timbu/1c806e1deb3638a0305ae3d8d7aeaa4a95b7efec.jpg", title: "Nike Airforce 1’ 07", price: 80, reviews: 100 },
-              { id: 2, src: "src/timbu/3d2d017cd58ce4025c7580580112012b97eb4aa8.jpg", title: "Nike Air Max 90", price: 85, reviews: 120 },
-              { id: 3, src: "src/timbu/e86e4ccedb1bca3b1ba8e1e3c7f0512ce535eaa4.jpg", title: "Air Jordan 13 R.", price: 95, reviews: 90 },
-              { id: 4, src: "src/timbu/d5234822891031f94bbc728926060de81e751d57.jpg", title: "Air Jordan Retro", price: 100, reviews: 110 },
-              { id: 5, src: "src/timbu/f7de98a0280bf85083fb2e3c87457ab9ad1e65a0.jpg", title: "Nike Free Metcon", price: 90, reviews: 95 },
-              { id: 6, src: "src/timbu/35fdb09b153eef1bc923ed13237b045a4fd6c136.jpg", title: "Nike Airforce 4", price: 85, reviews: 105 }
+              { id: 1, src: "./timbu/1c806e1deb3638a0305ae3d8d7aeaa4a95b7efec.jpg", title: "Nike Airforce 1’ 07", price: 80, reviews: 100 },
+              { id: 2, src: "./timbu/3d2d017cd58ce4025c7580580112012b97eb4aa8.jpg", title: "Nike Air Max 90", price: 85, reviews: 120 },
+              { id: 3, src: "./timbu/e86e4ccedb1bca3b1ba8e1e3c7f0512ce535eaa4.jpg", title: "Air Jordan 13 R.", price: 95, reviews: 90 },
+              { id: 4, src: "./timbu/d5234822891031f94bbc728926060de81e751d57.jpg", title: "Air Jordan Retro", price: 100, reviews: 110 },
+              { id: 5, src: "./timbu/f7de98a0280bf85083fb2e3c87457ab9ad1e65a0.jpg", title: "Nike Free Metcon", price: 90, reviews: 95 },
+              { id: 6, src: "./timbu/35fdb09b153eef1bc923ed13237b045a4fd6c136.jpg", title: "Nike Airforce 4", price: 85, reviews: 105 }
             ].map((product) => (
               <div key={product.id} className="flex-shrink-0 w-64 sm:w-72 lg:w-full cursor-pointer" onClick={() => handleImageClick(product)}>
                 <div className="relative">
@@ -160,9 +160,9 @@ const Main = () => {
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">Deal of the day</h2>
           <div className="flex overflow-x-auto pb-4 lg:pb-0 lg:grid lg:grid-cols-3 gap-4">
             {[
-              "src/timbu/WhatsApp Image 2024-07-08 at 08.33.00_c613d554.jpg",
-              "src/timbu/WhatsApp Image 2024-07-08 at 08.29.57_0644badc.jpg",
-              "src/timbu/WhatsApp Image 2024-07-08 at 08.30.03_448e87b0.jpg"
+              "./timbu/WhatsApp Image 2024-07-08 at 08.33.00_c613d554.jpg",
+              "./timbu/WhatsApp Image 2024-07-08 at 08.29.57_0644badc.jpg",
+              "./timbu/WhatsApp Image 2024-07-08 at 08.30.03_448e87b0.jpg"
             ].map((src, i) => (
               <div key={i} className="flex-shrink-0 w-64 sm:w-72 lg:w-full relative bg-white p-4 sm:p-6 rounded-lg shadow-md">
                 <img src={src} alt={`Deal ${i + 1}`} className="w-full h-auto" />
@@ -181,18 +181,18 @@ const Main = () => {
         <div className="relative">
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 overflow-x-auto scroll-smooth" id="product-slider">
             {[
-              { id: 1, src: "src/timbu/25105d164850b1a45cf811ed1707809767ef97de.jpg", title: "Vans Airfield 3", price: 80, reviews: 100 },
-              { id: 2, src: "src/timbu/3d2d017cd58ce4025c7580580112012b97eb4aa8.jpg", title: "Nike Airforce 1", price: 85, reviews: 120 },
-              { id: 3, src: "src/timbu/b53dee6fc09d923608c2e3b07a60845cf4fbea56.jpg", title: "Puma and Lamelo", price: 95, reviews: 90 },
-              { id: 4, src: "src/timbu/272e4d7b8e2dc59b4eca8d09363fc4027af9e813.jpg", title: "Nitro Elite 3", price: 100, reviews: 110 },
-              { id: 5, src: "src/timbu/6c2945c3bbe52ba7d0e8d80f17ed01c16e042abd.jpg", title: "Palermo leather", price: 90, reviews: 95 },
-              { id: 6, src: "src/timbu/13a92b07c0a40b09d6f1a86719368dec8a1e8ca8.jpg", title: "Team Big Kids", price: 85, reviews: 105 },
-              { id: 7, src: "src/timbu/de4bef426a1f8a8f0e306710e10e0192258ebd1e.jpg", title: "Amour Big Kids", price: 75, reviews: 98 },
-              { id: 8, src: "src/timbu/041af138c98bd2b9111298d581cbeb4e7a69b3a4.jpg", title: "Nano Court T.S", price: 110, reviews: 115 },
-              { id: 9, src: "src/timbu/59e602dad5a7dca654166b3a66154b60f7a6579c.jpg", title: "Panini Pres. 94", price: 120, reviews: 130 },
-              { id: 10, src: "src/timbu/1e0c41ff262be9b30fe552158754546fca8a8dee.jpg", title: "Nano X4", price: 95, reviews: 105 },
-              { id: 11, src: "src/timbu/55137142ae0bfd3f2660b4fa388ca709e0bf5f1c.jpg", title: "Club C Grounds", price: 85, reviews: 100 },
-              { id: 12, src: "src/timbu/baa2ce7c4d99969ebf8b0df7a974bac639a4a277.jpg", title: "Panini ES22", price: 130, reviews: 140 }
+              { id: 1, src: "./timbu/25105d164850b1a45cf811ed1707809767ef97de.jpg", title: "Vans Airfield 3", price: 80, reviews: 100 },
+              { id: 2, src: "./timbu/3d2d017cd58ce4025c7580580112012b97eb4aa8.jpg", title: "Nike Airforce 1", price: 85, reviews: 120 },
+              { id: 3, src: "./timbu/b53dee6fc09d923608c2e3b07a60845cf4fbea56.jpg", title: "Puma and Lamelo", price: 95, reviews: 90 },
+              { id: 4, src: "./timbu/272e4d7b8e2dc59b4eca8d09363fc4027af9e813.jpg", title: "Nitro Elite 3", price: 100, reviews: 110 },
+              { id: 5, src: "./timbu/6c2945c3bbe52ba7d0e8d80f17ed01c16e042abd.jpg", title: "Palermo leather", price: 90, reviews: 95 },
+              { id: 6, src: "./timbu/13a92b07c0a40b09d6f1a86719368dec8a1e8ca8.jpg", title: "Team Big Kids", price: 85, reviews: 105 },
+              { id: 7, src: "./timbu/de4bef426a1f8a8f0e306710e10e0192258ebd1e.jpg", title: "Amour Big Kids", price: 75, reviews: 98 },
+              { id: 8, src: "./timbu/041af138c98bd2b9111298d581cbeb4e7a69b3a4.jpg", title: "Nano Court T.S", price: 110, reviews: 115 },
+              { id: 9, src: "./timbu/59e602dad5a7dca654166b3a66154b60f7a6579c.jpg", title: "Panini Pres. 94", price: 120, reviews: 130 },
+              { id: 10, src: "./timbu/1e0c41ff262be9b30fe552158754546fca8a8dee.jpg", title: "Nano X4", price: 95, reviews: 105 },
+              { id: 11, src: "./timbu/55137142ae0bfd3f2660b4fa388ca709e0bf5f1c.jpg", title: "Club C Grounds", price: 85, reviews: 100 },
+              { id: 12, src: "./timbu/baa2ce7c4d99969ebf8b0df7a974bac639a4a277.jpg", title: "Panini ES22", price: 130, reviews: 140 }
             ].map((product) => (
               <div key={product.id} className="relative min-w-full md:min-w-0 cursor-pointer" onClick={() => handleImageClick(product)}>
                 <img src={product.src} alt={product.title} className="w-full h-auto rounded-lg" />
@@ -237,19 +237,19 @@ const Main = () => {
           <p className="text-gray-600 text-center mt-4">Snap a photo of yourself in our sneakers and share it with our online community</p>
           <div className="mt-6 flex overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 lg:grid lg:grid-cols-3 gap-4">
             <div className="flex-shrink-0 w-64 sm:w-72 lg:w-full grid grid-rows-2 gap-4">
-              <img src="src/timbu/a772c09ee034e7e61b4ae6f05541619fa3a74afc.jpg" alt="User" className="w-full h-auto" />
-              <img src="src/timbu/5d9ebd3886da5539cb6e03c0364d155b69e22eeb.jpg" alt="User" className="w-full h-auto" />
+              <img src="./timbu/a772c09ee034e7e61b4ae6f05541619fa3a74afc.jpg" alt="User" className="w-full h-auto" />
+              <img src="./timbu/5d9ebd3886da5539cb6e03c0364d155b69e22eeb.jpg" alt="User" className="w-full h-auto" />
             </div>
             <div className="flex-shrink-0 w-64 sm:w-72 lg:w-full grid gap-4">
-              <img src="src/timbu/6a55c64cbf21fe7c0192119160185ac0195ae09e.jpg" alt="User" className="w-full h-auto" />
+              <img src="./timbu/6a55c64cbf21fe7c0192119160185ac0195ae09e.jpg" alt="User" className="w-full h-auto" />
               <div className="grid grid-cols-2 gap-4">
-                <img src="src/timbu/f82de9a34a5760fb2e2b0e156d0514e1b265c8ed.jpg" alt="User" className="w-full h-auto" />
-                <img src="src/timbu/f85052a4f4c745ae5f3f61ec26c26bd555f23a6a.jpg" alt="User" className="w-full h-auto" />
+                <img src="./timbu/f82de9a34a5760fb2e2b0e156d0514e1b265c8ed.jpg" alt="User" className="w-full h-auto" />
+                <img src="./timbu/f85052a4f4c745ae5f3f61ec26c26bd555f23a6a.jpg" alt="User" className="w-full h-auto" />
               </div>
             </div>
             <div className="flex-shrink-0 w-64 sm:w-72 lg:w-full grid grid-rows-2 gap-4">
-              <img src="src/timbu/e0f7986b469b384b4c61b3e3f0822187399aa944.jpg" alt="User" className="w-full h-auto" />
-              <img src="src/timbu/1bd87534efd51cac728df36730cd91e65ba336d9.jpg" alt="User" className="w-full h-auto" />
+              <img src="./timbu/e0f7986b469b384b4c61b3e3f0822187399aa944.jpg" alt="User" className="w-full h-auto" />
+              <img src="./timbu/1bd87534efd51cac728df36730cd91e65ba336d9.jpg" alt="User" className="w-full h-auto" />
             </div>
           </div>
         </section>
