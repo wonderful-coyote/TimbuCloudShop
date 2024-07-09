@@ -31,7 +31,7 @@ const Main = () => {
           <p className="mt-4 text-gray-600">Explore the latest trends and timeless classics in sneakers, all in one place: from casual kicks to high-performance athletic shoes. We've got your feet covered</p>
           <button className="mt-6 px-6 py-2 bg-black text-white rounded-full">Explore now</button>
         </div>
-        <img src="public/timbu/5da98e95d9a978d0916cf3f939bf03bd224a041c.jpg" alt="Sneaker" className="w-96 h-auto" />
+        <img src="./timbu/5da98e95d9a978d0916cf3f939bf03bd224a041c.jpg" alt="Sneaker" className="w-96 h-auto" />
       </section>
 
       {/* Frame 2 */}
@@ -72,10 +72,10 @@ const Main = () => {
         <div className="relative">
           <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4 overflow-x-auto scroll-smooth" id="new-collection-slider">
             {[
-              "public/timbu/4823dc17f121b8bb2cfe033ef502a41c384a9d24.jpg",
-              "public/timbu/4b827fbef68ccaffaf57b577861cd3c78c53e7d7.jpg",
-              "src/timbu/WhatsApp Image 2024-07-08 at 09.23.36_022ab817.jpg",
-              "src/timbu/WhatsApp Image 2024-07-08 at 09.23.28_7ffaacb7.jpg"
+              "./timbu/4823dc17f121b8bb2cfe033ef502a41c384a9d24.jpg",
+              "./timbu/4b827fbef68ccaffaf57b577861cd3c78c53e7d7.jpg",
+              "./timbu/WhatsApp Image 2024-07-08 at 09.23.36_022ab817.jpg",
+              "./timbu/WhatsApp Image 2024-07-08 at 09.23.28_7ffaacb7.jpg"
             ].map((src, i) => (
               <div key={i} className="relative min-w-full lg:min-w-0">
                 <img src={src} alt={`Sneaker ${i + 1}`} className="w-full h-auto" />
