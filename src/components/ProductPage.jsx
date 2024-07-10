@@ -46,7 +46,8 @@ const ProductPage = () => {
         src: product.src,
         selectedColor: selectedColor,
         selectedSize: selectedSize,
-        quantity: 1, 
+        quantity: 1,
+        isDealOfDay: product.isDealOfDay || false,
       };
       addToCart(cartItem);
       notifyItemAdded();

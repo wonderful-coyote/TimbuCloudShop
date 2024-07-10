@@ -13,6 +13,11 @@ const Main = () => {
   const handleAddToCart = (product) => {
     navigate('/product-page', { state: { product } });
   };
+
+  const handleDealClick = (deal) => {
+    // Navigate to the product page, passing the deal information
+    navigate(`/product-page/${deal.id}`, { state: { deal } });
+  };
   
   const [cart, setCart] = useState([]);
   const [favorites, setFavorites] = useState([]);
@@ -177,16 +182,51 @@ const Main = () => {
         {/* Frame 6 */}
         <section className="mt-10 bg-offwhite p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg shadow-md overflow-hidden">
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">Deal of the day</h2>
-          <div className="flex overflow-x-auto pb-4 lg:pb-0 lg:grid lg:grid-cols-3 gap-4">
+          <div className="flex overflow-x-auto pb-10 lg:pb-5 lg:grid lg:grid-cols-3 gap-4">
             {[
-              "./timbu/WhatsApp Image 2024-07-08 at 08.33.00_c613d554.jpg",
-              "./timbu/WhatsApp Image 2024-07-08 at 08.29.57_0644badc.jpg",
-              "./timbu/WhatsApp Image 2024-07-08 at 08.30.03_448e87b0.jpg"
-            ].map((src, i) => (
-              <div key={i} className="flex-shrink-0 w-64 sm:w-72 lg:w-full relative bg-white p-4 sm:p-6 rounded-lg shadow-md">
-                <img src={src} alt={`Deal ${i + 1}`} className="w-full h-auto" />
-                <button className="absolute bottom-[-20px] left-1/2 transform -translate-x-1/2 px-4 py-2 bg-black text-white rounded-full text-sm">
-                  Get 50% OFF
+              {
+                id: 101,
+                src: "./timbu/WhatsApp Image 2024-07-08 at 08.33.00_c613d554.jpg",
+                title: "Nike Air Max 270",
+                price: 150,
+                reviews: 230,
+                discount: 50,
+                isDealOfDay: true
+              },
+              {
+                id: 102,
+                src: "./timbu/WhatsApp Image 2024-07-08 at 08.29.57_0644badc.jpg",
+                title: "Adidas Ultraboost 21",
+                price: 180,
+                reviews: 195,
+                discount: 50,
+                isDealOfDay: true
+              },
+              {
+                id: 103,
+                src: "./timbu/WhatsApp Image 2024-07-08 at 08.30.03_448e87b0.jpg",
+                title: "Puma RS-X³ Puzzle",
+                price: 110,
+                reviews: 160,
+                discount: 50,
+                isDealOfDay: true
+              }
+            ].map((deal) => (
+              <div 
+                key={deal.id} 
+                className="flex-shrink-0 w-64 sm:w-72 lg:w-full relative bg-white p-4 sm:p-6 rounded-lg shadow-md"
+              >
+                <div className="relative aspect-square overflow-hidden">
+                  <img 
+                    src={deal.src} 
+                    alt={deal.title} 
+                    className="w-full h-full object-cover cursor-pointer" 
+                    onClick={() => handleImageClick(deal)}
+                  />
+                  
+                </div>
+                <button className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 px-4 py-2 bg-black text-white rounded-full text-sm whitespace-nowrap">
+                  Get {deal.discount}% OFF
                 </button>
               </div>
             ))}
