@@ -92,7 +92,7 @@ const CheckoutPage = () => {
                  <h2 className="text-2xl font-semibold mb-4">Delivery Details</h2>
                  <button 
                    onClick={handleSaveDetails}
-                   className="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded"
+                   className="absolute top-4 right-4 bg-black text-white border border-transparent px-4 py-2 rounded hover:bg-white hover:text-black hover:border-black"
                  >
                    Save Details
                  </button>
@@ -263,7 +263,7 @@ const CheckoutPage = () => {
                  </div>
                  <button 
                    onClick={handlePlaceOrder}
-                   className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
+                   className="w-full bg-black text-white border border-transparent px-4 py-2 rounded-lg shadow-md hover:bg-white hover:text-black hover:border-black transition duration-300"
                  >
                    Place Order
                  </button>

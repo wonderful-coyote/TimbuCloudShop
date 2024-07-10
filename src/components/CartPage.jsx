@@ -139,7 +139,7 @@ const CartPage = () => {
                   </div>
                   <button 
                     onClick={handleCheckout}
-                    className="w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
+                    className="w-full mt-4 bg-black text-white border border-transparent px-4 py-2 rounded-lg shadow-md hover:bg-white hover:text-black hover:border-black transition duration-300"
                   >
                     Proceed to Checkout
                   </button>

@@ -287,7 +287,7 @@ const ProductPage = () => {
                <div className="flex space-x-4 mb-8">
                  <button
                    onClick={handleAddToCart}
-                   className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
+                   className="flex items-center bg-black text-white border border-transparent px-4 py-2 rounded-lg shadow-md hover:bg-white hover:text-black hover:border-black transition duration-300"
                  >
                    <FaShoppingCart className="mr-2" />
                    Add to Cart
