@@ -9,6 +9,10 @@ const Main = () => {
   const handleImageClick = (product) => {
     navigate('/product-page', { state: { product } });
   };
+
+  const handleAddToCart = (product) => {
+    navigate('/product-page', { state: { product } });
+  };
   
   const [cart, setCart] = useState([]);
   const [favorites, setFavorites] = useState([]);
@@ -63,39 +67,54 @@ const Main = () => {
           </div>
         </section>
 
-      {/* Frame 3 */}
-      <section className="mt-10 bg-white p-10 rounded-lg shadow-md">
-        <h2 className="text-3xl font-bold text-center">Explore Our New Collection</h2>
-        <p className="text-gray-600 text-center mt-4">
-          Discover our latest arrivals featuring the freshest designs and cutting-edge styles. Elevate your sneaker game with our new collection, crafted for comfort and built for performance.
-        </p>
-        <div className="relative">
-          <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4 overflow-x-auto scroll-smooth" id="new-collection-slider">
-            {[
-              "./timbu/4823dc17f121b8bb2cfe033ef502a41c384a9d24.jpg",
-              "./timbu/4b827fbef68ccaffaf57b577861cd3c78c53e7d7.jpg",
-              "./timbu/WhatsApp Image 2024-07-08 at 09.23.36_022ab817.jpg",
-              "./timbu/WhatsApp Image 2024-07-08 at 09.23.28_7ffaacb7.jpg"
-            ].map((src, i) => (
-              <div key={i} className="relative min-w-full lg:min-w-0">
-                <img src={src} alt={`Sneaker ${i + 1}`} className="w-full h-auto" />
-                <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
-                  <FaHeart className="text-gray-600" />
-                </button>
-                <button className="absolute bottom-2 right-2 bg-white px-3 py-2 rounded-full shadow-md flex items-center">
-                  <FaShoppingCart className="mr-2 text-gray-600" /> Add to Cart
-                </button>
-              </div>
-            ))}
+        {/* Frame 3 */}
+        <section className="mt-10 bg-white p-10 rounded-lg shadow-md">
+          <h2 className="text-3xl font-bold text-center">Explore Our New Collection</h2>
+          <p className="text-gray-600 text-center mt-4">
+            Discover our latest arrivals featuring the freshest designs and cutting-edge styles. Elevate your sneaker game with our new collection, crafted for comfort and built for performance.
+          </p>
+          <div className="relative">
+            <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4 overflow-x-auto scroll-smooth" id="new-collection-slider">
+              {[
+                { id: 1, src: "./timbu/4823dc17f121b8bb2cfe033ef502a41c384a9d24.jpg", title: "Nike Air Zoom Pegasus 38", price: 120, reviews: 150 },
+                { id: 2, src: "./timbu/4b827fbef68ccaffaf57b577861cd3c78c53e7d7.jpg", title: "Adidas Ultraboost 21", price: 180, reviews: 200 },
+                { id: 3, src: "./timbu/WhatsApp Image 2024-07-08 at 09.23.36_022ab817.jpg", title: "New Balance Fresh Foam 1080v11", price: 150, reviews: 130 },
+                { id: 4, src: "./timbu/WhatsApp Image 2024-07-08 at 09.23.28_7ffaacb7.jpg", title: "Asics Gel-Nimbus 23", price: 150, reviews: 140 }
+              ].map((product) => (
+                <div key={product.id} className="relative min-w-full lg:min-w-0 aspect-[4/3]">
+                  <img 
+                    src={product.src} 
+                    alt={product.title} 
+                    className="w-full h-full object-cover cursor-pointer" 
+                    onClick={() => handleImageClick(product)} 
+                  />
+                  <div className="absolute inset-0 flex flex-col justify-between p-2">
+                    <div className="self-end">
+                      <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
+                        <FaHeart className="text-gray-600" />
+                      </button>
+                    </div>
+                    <div className="self-end">
+                      <button
+                        onClick={() => handleAddToCart(product)}
+                        className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
+                      >
+                        <FaShoppingCart className="mr-2" />
+                        Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-center mt-4 space-x-2">
+              <button className="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full" onClick={() => document.getElementById('new-collection-slider').scrollLeft -= 300}>1</button>
+              <button className="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full" onClick={() => document.getElementById('new-collection-slider').scrollLeft += 300}>2</button>
+              <button className="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full" onClick={() => document.getElementById('new-collection-slider').scrollLeft += 600}>3</button>
+              <button className="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full" onClick={() => document.getElementById('new-collection-slider').scrollLeft += 900}>&gt;</button>
+            </div>
           </div>
-          <div className="flex justify-center mt-4 space-x-2">
-            <button className="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full" onClick={() => document.getElementById('new-collection-slider').scrollLeft -= 300}>1</button>
-            <button className="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full" onClick={() => document.getElementById('new-collection-slider').scrollLeft += 300}>2</button>
-            <button className="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full" onClick={() => document.getElementById('new-collection-slider').scrollLeft += 600}>3</button>
-            <button className="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full" onClick={() => document.getElementById('new-collection-slider').scrollLeft += 900}>&gt;</button>
-          </div>
-        </div>
-      </section>
+        </section>
 
 
 
