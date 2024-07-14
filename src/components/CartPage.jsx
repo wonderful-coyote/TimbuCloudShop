@@ -61,7 +61,7 @@ const CartPage = () => {
   };
 
   const handleImageClick = (product) => {
-    navigate('/product-page', { state: { product } });
+    navigate('/product-page', { state: { productId: product.id } });
   };
 
   const handleClearCart = () => {
