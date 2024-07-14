@@ -69,8 +69,8 @@ const ProductPage = () => {
     });
   };
 
- 
-  
+
+
   const reviews = [
     {
       user: 'Blade X',
@@ -148,7 +148,7 @@ const ProductPage = () => {
     navigate('/product-page', { state: { product } });
   };
 
-  
+
 
   return (
      <ScrollToTopOnMount> 
@@ -379,7 +379,7 @@ const ProductPage = () => {
          <Footer />
        </div>
      </ScrollToTopOnMount>
-    
+
   );
 };
 
