@@ -1,3 +1,4 @@
+//main.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -101,15 +102,16 @@ const Main = () => {
     navigate("/product-page", { state: { product } });
   };
 
-  const handleAddToCart = (product) => {
-    navigate("/product-page", { state: { product } });
+  const handleViewProduct = (product) => {
+    navigate('/product-page', { state: { productId: product.id } });
   };
 
   const handleDealClick = (deal) => {
     navigate("/product-page", {
       state: {
-        product: deal,
+        productId: deal.id,
         discountApplied: true,
+        discountPercentage: 50
       },
     });
   };
@@ -227,7 +229,7 @@ const Main = () => {
                       </div>
                       <div className="self-end">
                         <button
-                          onClick={() => handleAddToCart(product)}
+                          onClick={() => handleViewProduct(product)}
                           className="flex items-center bg-black text-white border border-transparent px-4 py-2 rounded-lg shadow-md hover:bg-white hover:text-black hover:border-black transition duration-300"
                         >
                           <FaEye className="mr-2" />
@@ -347,8 +349,7 @@ const Main = () => {
                         <div className="flex items-center">
                           <button
                             onClick={(e) => {
-                              e.stopPropagation();
-                              handleAddToCart(product);
+                              handleViewProduct(product);
                             }}
                             className="bg-black text-white p-2 rounded-full"
                           >

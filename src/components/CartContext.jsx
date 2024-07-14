@@ -1,4 +1,3 @@
-// CartContext.jsx
 import React, { createContext, useState, useContext } from 'react';
 
 const CartContext = createContext();
@@ -16,10 +15,15 @@ export const CartProvider = ({ children }) => {
       );
 
       if (existingItemIndex !== -1) {
-        // If item exists, increase its quantity
-        const updatedCart = [...prevCart];
-        updatedCart[existingItemIndex].quantity += 1;
-        return updatedCart;
+        // If item exists and is discounted, add a new non-discounted item
+        if (prevCart[existingItemIndex].discounted) {
+          return [...prevCart, { ...item, quantity: 1, discounted: false }];
+        } else {
+          // If item exists and is not discounted, increase its quantity
+          const updatedCart = [...prevCart];
+          updatedCart[existingItemIndex].quantity += 1;
+          return updatedCart;
+        }
       } else {
         // If item doesn't exist, add it to the cart
         return [...prevCart, { ...item, quantity: 1 }];
@@ -34,7 +38,9 @@ export const CartProvider = ({ children }) => {
   const updateQuantity = (index, newQuantity) => {
     setCart((prevCart) => {
       const updatedCart = [...prevCart];
-      updatedCart[index].quantity = Math.max(1, newQuantity);
+      if (!updatedCart[index].discounted) {
+        updatedCart[index].quantity = Math.max(1, newQuantity);
+      }
       return updatedCart;
     });
   };

@@ -1,15 +1,49 @@
-//CartPage.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaTrash, FaHeart, FaStar, FaShoppingCart } from 'react-icons/fa';
+import { FaTrash, FaHeart, FaStar, FaEye, FaShoppingCart } from 'react-icons/fa';
 import Header from './Header';
 import Footer from './Footer';
 import { useCart } from './CartContext';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CartPage = () => {
   const navigate = useNavigate();
- 
-  const { cart, removeFromCart, updateQuantity, addToCart } = useCart();
+  const { cart, removeFromCart, updateQuantity, addToCart, clearCart } = useCart();
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("https://api.timbu.cloud/products", {
+          params: {
+            organization_id: "58ddfc3dae284682a34786c6a0ef8ca8",
+            reverse_sort: false,
+            size: 30,
+            Appid: "XN6CWIWSNU9H02L",
+            Apikey: "8e878218ff9b4c7dbbd6bc0b9c57f13c20240713162028067521",
+          },
+        });
+
+        if (response.data && Array.isArray(response.data.items)) {
+          const shuffled = [...response.data.items].sort(() => 0.5 - Math.random());
+          setSelectedProducts(shuffled.slice(0, 3));
+        } else {
+          setError("Unexpected API response structure");
+        }
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError("Failed to fetch products");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleBackClick = () => {
     navigate(-1);
@@ -20,109 +54,128 @@ const CartPage = () => {
   };
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cart.reduce((total, item) => {
+      const itemPrice = item.discounted ? item.discountedPrice : item.price;
+      return total + itemPrice * item.quantity;
+    }, 0);
   };
 
   const handleImageClick = (product) => {
     navigate('/product-page', { state: { product } });
   };
 
-  const products = [
-    { id: 1, src: "./timbu/1c806e1deb3638a0305ae3d8d7aeaa4a95b7efec.jpg", title: "Nike Airforce 1’ 07", price: 80, reviews: 100 },
-    { id: 2, src: "./timbu/3d2d017cd58ce4025c7580580112012b97eb4aa8.jpg", title: "Nike Air Max 90", price: 85, reviews: 120 },
-    { id: 3, src: "./timbu/e86e4ccedb1bca3b1ba8e1e3c7f0512ce535eaa4.jpg", title: "Air Jordan 13 R.", price: 95, reviews: 90 },
-    { id: 4, src: "./timbu/d5234822891031f94bbc728926060de81e751d57.jpg", title: "Air Jordan Retro", price: 100, reviews: 110 },
-    { id: 5, src: "./timbu/f7de98a0280bf85083fb2e3c87457ab9ad1e65a0.jpg", title: "Nike Free Metcon", price: 90, reviews: 95 },
-    { id: 6, src: "./timbu/35fdb09b153eef1bc923ed13237b045a4fd6c136.jpg", title: "Nike Airforce 4", price: 85, reviews: 105 },
-    { id: 7, src: "./timbu/25105d164850b1a45cf811ed1707809767ef97de.jpg", title: "Vans Airfield 3", price: 80, reviews: 100 },
-    { id: 8, src: "./timbu/b53dee6fc09d923608c2e3b07a60845cf4fbea56.jpg", title: "Puma and Lamelo", price: 95, reviews: 90 },
-    { id: 9, src: "./timbu/272e4d7b8e2dc59b4eca8d09363fc4027af9e813.jpg", title: "Nitro Elite 3", price: 100, reviews: 110 },
-    { id: 10, src: "./timbu/6c2945c3bbe52ba7d0e8d80f17ed01c16e042abd.jpg", title: "Palermo leather", price: 90, reviews: 95 },
-    { id: 11, src: "./timbu/13a92b07c0a40b09d6f1a86719368dec8a1e8ca8.jpg", title: "Team Big Kids", price: 85, reviews: 105 },
-    { id: 12, src: "./timbu/de4bef426a1f8a8f0e306710e10e0192258ebd1e.jpg", title: "Amour Big Kids", price: 75, reviews: 98 },
-    { id: 13, src: "./timbu/041af138c98bd2b9111298d581cbeb4e7a69b3a4.jpg", title: "Nano Court T.S", price: 110, reviews: 115 },
-    { id: 14, src: "./timbu/59e602dad5a7dca654166b3a66154b60f7a6579c.jpg", title: "Panini Pres. 94", price: 120, reviews: 130 },
-    { id: 15, src: "./timbu/1e0c41ff262be9b30fe552158754546fca8a8dee.jpg", title: "Nano X4", price: 95, reviews: 105 },
-    { id: 16, src: "./timbu/55137142ae0bfd3f2660b4fa388ca709e0bf5f1c.jpg", title: "Club C Grounds", price: 85, reviews: 100 },
-    { id: 17, src: "./timbu/baa2ce7c4d99969ebf8b0df7a974bac639a4a277.jpg", title: "Panini ES22", price: 130, reviews: 140 }
-  ];
-
-  const getRandomProducts = (products, count) => {
-    const shuffled = [...products].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+  const handleClearCart = () => {
+    clearCart();
+    toast.success('Cart cleared successfully!');
   };
 
-  const selectedProducts = getRandomProducts(products, 3);
+  const handleViewProduct = (product) => {
+    navigate('/product-page', { state: { productId: product.id } });
+  };
+
+  const getPrice = (product) => {
+    if (product.current_price && Array.isArray(product.current_price) && product.current_price.length > 0) {
+      const priceObj = product.current_price[0];
+      const currency = Object.keys(priceObj)[0];
+      if (Array.isArray(priceObj[currency]) && priceObj[currency].length > 0) {
+        return priceObj[currency][0];
+      }
+    }
+    return "N/A";
+  };
+
+  const handleQuantityChange = (index, newQuantity) => {
+    const item = cart[index];
+    if (item.discounted && newQuantity > item.quantity) {
+      toast.error("Cannot increase quantity of discounted items.");
+    } else {
+      updateQuantity(index, newQuantity);
+    }
+  };
 
   return (
-      <div>
-        <Header />
+    <div>
+      <Header />
+      <ToastContainer />
 
-        <main className="p-5">
-          <button 
-            onClick={handleBackClick} 
-            className="bg-gray-200 p-2 rounded hover:bg-gray-300 mb-4"
-          >
-            Back
-          </button>
+      <main className="p-5">
+        <button 
+          onClick={handleBackClick} 
+          className="bg-gray-200 p-2 rounded hover:bg-gray-300 mb-4"
+        >
+          Back
+        </button>
 
-          <div className="container mx-auto mt-8">
-            <h2 className="text-2xl font-semibold mb-4">Your Cart</h2>
+        <div className="container mx-auto mt-8">
+          <h2 className="text-2xl font-semibold mb-4">Your Cart</h2>
 
-            <div className="lg:flex lg:space-x-8">
-              {/* Left Column - Cart Contents */}
-              <div className="w-full">
-                {cart.length === 0 ? (
-                  <p>Your cart is empty.</p>
-                ) : (
-                  <>
-                    <div className="hidden sm:grid sm:grid-cols-4 sm:gap-4 font-semibold mb-4">
-                      <div className="col-span-2">Product</div>
-                      <div>Quantity</div>
-                      <div>Price</div>
-                    </div>
-                    {cart.map((item, index) => (
-                      <div key={index} className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-start border-b py-4">
-                        <div className="col-span-1 sm:col-span-2 flex items-start">
-                          <img src={item.src} alt={item.title} className="w-24 h-24 object-cover rounded-lg mr-4" />
-                          <div>
-                            <h3 className="text-lg font-semibold">{item.title}</h3>
-                            <p className="text-gray-600">Color: {item.selectedColor}</p>
-                            <p className="text-gray-600">Size: {item.selectedSize}</p>
-                            <button 
-                              onClick={() => removeFromCart(index)}
-                              className="text-red-500 hover:text-red-700 mt-2"
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </div>
-                        <div className="flex items-center">
+          <div className="lg:flex lg:space-x-8">
+            {/* Left Column - Cart Contents */}
+            <div className="w-full">
+              {cart.length === 0 ? (
+                <p>Your cart is empty.</p>
+              ) : (
+                <>
+                  <div className="hidden sm:grid sm:grid-cols-4 sm:gap-4 font-semibold mb-4">
+                    <div className="col-span-2">Product</div>
+                    <div>Quantity</div>
+                    <div>Price</div>
+                  </div>
+                  {cart.map((item, index) => (
+                    <div key={index} className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-start border-b py-4">
+                      <div className="col-span-1 sm:col-span-2 flex items-start">
+                        <img src={item.src} alt={item.name} className="w-24 h-24 object-cover rounded-lg mr-4" />
+                        <div>
+                          <h3 className="text-lg font-semibold">{item.name}</h3>
+                          <p className="text-gray-600">Color: {item.selectedColor}</p>
+                          <p className="text-gray-600">Size: {item.selectedSize}</p>
                           <button 
-                            onClick={() => updateQuantity(index, Math.max(1, item.quantity - 1))}
-                            className="bg-gray-200 px-2 py-1 rounded"
+                            onClick={() => removeFromCart(index)}
+                            className="text-red-500 hover:text-red-700 mt-2"
                           >
-                            -
+                            Remove
                           </button>
-                          <span className="mx-2">{item.quantity}</span>
-                          <button 
-                            onClick={() => updateQuantity(index, item.quantity + 1)}
-                            className="bg-gray-200 px-2 py-1 rounded"
-                          >
-                            +
-                          </button>
-                        </div>
-                        <div className="flex items-center">
-                          <p className="text-gray-600">${item.price}</p>
                         </div>
                       </div>
-                    ))}
-                  </>
-                )}
-              </div>
+                      <div className="flex items-center">
+                        <button 
+                          onClick={() => handleQuantityChange(index, Math.max(1, item.quantity - 1))}
+                          className="bg-gray-200 px-2 py-1 rounded"
+                        >
+                          -
+                        </button>
+                        <span className="mx-2">{item.quantity}</span>
+                        <button 
+                          onClick={() => handleQuantityChange(index, item.quantity + 1)}
+                          className="bg-gray-200 px-2 py-1 rounded"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <div className="flex items-center">
+                        {item.discounted ? (
+                          <>
+                            <p className="text-gray-600 line-through mr-2">${item.price}</p>
+                            <p className="text-red-500">${item.discountedPrice}</p>
+                          </>
+                        ) : (
+                          <p className="text-gray-600">${item.price}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+              <button 
+                onClick={handleClearCart}
+                className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Clear Cart
+              </button>
+            </div>
 
-              {/* Right Column - Order Summary and Payment Options */}
-              <div className="lg:w-1/3 mt-8 lg:mt-0">
+            {/* Right Column - Order Summary and Payment Options */}
+            <div className="lg:w-1/3 mt-8 lg:mt-0">
                 <div className="bg-gray-100 p-6 rounded-lg">
                   <h3 className="text-xl font-semibold mb-4">Order Summary</h3>
                   <div className="flex justify-between mb-2">
@@ -163,36 +216,45 @@ const CartPage = () => {
                   </div>
                 </div>
               </div>
-            </div>
           </div>
+        </div>
 
-          {/* Similar items section */}
-          <section className="mt-10 bg-white p-10 rounded-lg shadow-md">
-            <h2 className="text-3xl font-bold text-center">We think you’ll like these</h2>
+        {/* Similar items section */}
+        <section className="mt-10 bg-white p-10 rounded-lg shadow-md">
+          <h2 className="text-3xl font-bold text-center">We think you'll like these</h2>
+          {loading ? (
+            <p>Loading products...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : (
             <div className="mt-10 flex overflow-x-auto lg:grid lg:grid-cols-3 gap-4">
               {selectedProducts.map((product) => (
                 <div key={product.id} className="relative cursor-pointer flex-shrink-0 w-64 lg:w-auto" onClick={() => handleImageClick(product)}>
-                  <img src={product.src} alt={product.title} className="w-full h-auto rounded-lg" />
+                  <img 
+                    src={`https://api.timbu.cloud/images/${product.photos[0]?.url}`} 
+                    alt={product.name} 
+                    className="w-full h-auto rounded-lg"
+                  />
                   <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
                     <FaHeart className="text-gray-600" />
                   </button>
                   <div className="mt-2 flex justify-between">
                     <div className="text-left">
-                      <h3 className="text-xl font-bold">{product.title}</h3>
+                      <h3 className="text-xl font-bold">{product.name}</h3>
                       <div className="flex items-center text-xs space-x-2">
-                        <p className="text-gray-600">${product.price}</p>
+                        <p className="text-gray-600">${getPrice(product)}</p>
                         {[...Array(5)].map((_, i) => (
                           <FaStar key={i} className="text-yellow-500" />
                         ))}
-                        <span className="text-gray-600">({product.reviews} reviews)</span>
+                        <span className="text-gray-600">(100 reviews)</span>
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <FaShoppingCart 
+                      <FaEye 
                         className="text-gray-600 text-2xl cursor-pointer" 
                         onClick={(e) => {
                           e.stopPropagation();
-                          addToCart({...product, quantity: 1});
+                          handleViewProduct(product);
                         }}
                       />
                     </div>
@@ -200,12 +262,13 @@ const CartPage = () => {
                 </div>
               ))}
             </div>
-          </section>
-        </main>
+          )}
+        </section>
+      </main>
 
-        <Footer />
-      </div>
-    );
-  };
+      <Footer />
+    </div>
+  );
+};
 
 export default CartPage;
