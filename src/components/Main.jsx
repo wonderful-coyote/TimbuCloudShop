@@ -1,3 +1,4 @@
+//main.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -33,7 +34,7 @@ const Main = () => {
   // Frame 7 states
   const [allProducts, setAllProducts] = useState([]);
   const [currentPageFrame7, setCurrentPageFrame7] = useState(1);
-  const productsPerPageFrame7 = 9; // Changed to 9 products per page
+  const productsPerPageFrame7 = 9;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -50,7 +51,7 @@ const Main = () => {
         return priceObj[currency][0];
       }
     }
-    return "N/A"; // or any default value
+    return "N/A";
   };
 
   useEffect(() => {
@@ -69,16 +70,13 @@ const Main = () => {
         if (response.data && Array.isArray(response.data.items)) {
           const allProductsData = response.data.items;
 
-          // Set products for Frame 3
           setProducts(allProductsData);
 
-          // Set Deal of the Day for Frame 6
           const shuffledForDealOfDay = [...allProductsData].sort(
             () => 0.5 - Math.random()
           );
           setDealOfDay(shuffledForDealOfDay.slice(0, 3));
 
-          // Set all products for Frame 7
           setAllProducts(allProductsData);
         } else {
           setError("Unexpected API response structure");
@@ -94,32 +92,15 @@ const Main = () => {
     fetchProducts();
   }, []);
 
-  const handleImageClick = (product) => {
-    navigate("/product-page", { state: { product } });
-  };
-
-  const handleProductClick = async (productId) => {
-    try {
-      const response = await axios.get("https://api.timbu.cloud/products", {
-        params: {
-          organization_id: "58ddfc3dae284682a34786c6a0ef8ca8",
-          reverse_sort: false,
-          size: 30,
-          Appid: "XN6CWIWSNU9H02L",
-          Apikey: "8e878218ff9b4c7dbbd6bc0b9c57f13c20240713162028067521",
-        },
-      });
-
-      const productData = response.data.items.find(item => item.id === productId);
-
-      if (productData) {
-        navigate('/product-page', { state: { product: productData } });
-      } else {
-        console.error("Product not found");
-      }
-    } catch (error) {
-      console.error("Error fetching product:", error);
-    }
+  const handleProductClick = (product) => {
+    navigate("/product-page", { 
+      state: { 
+        productId: product.id,
+        // Remove or set default values for discountApplied and discountPercentage
+        discountApplied: false,
+        discountPercentage: 0
+      } 
+    });
   };
 
   const handleDealClick = (deal) => {
@@ -168,33 +149,33 @@ const Main = () => {
         </section>
 
         {/* Frame 2 */}
-          <section className="mt-10 bg-offwhite p-4 sm:p-6 rounded-lg shadow-md">
-            <div className="bg-white p-4 sm:p-6 rounded-lg">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="flex items-center">
-                  <FaTruck className="text-gray-600 mr-2" />
-                  <div>
-                    <h2 className="text-2xl font-bold">Free Delivery</h2>
-                    <p className="text-gray-600">On every order over $100</p>
-                  </div>
+        <section className="mt-10 bg-offwhite p-4 sm:p-6 rounded-lg shadow-md">
+          <div className="bg-white p-4 sm:p-6 rounded-lg">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="flex items-center">
+                <FaTruck className="text-gray-600 mr-2" />
+                <div>
+                  <h2 className="text-2xl font-bold">Free Delivery</h2>
+                  <p className="text-gray-600">On every order over $100</p>
                 </div>
-                <div className="flex items-center">
-                  <FaHeadset className="text-gray-600 mr-2" />
-                  <div>
-                    <h2 className="text-2xl font-bold">Online Support</h2>
-                    <p className="text-gray-600">A 24hours customer care</p>
-                  </div>
+              </div>
+              <div className="flex items-center">
+                <FaHeadset className="text-gray-600 mr-2" />
+                <div>
+                  <h2 className="text-2xl font-bold">Online Support</h2>
+                  <p className="text-gray-600">A 24hours customer care</p>
                 </div>
-                <div className="flex items-center">
-                  <FaTag className="text-gray-600 mr-2" />
-                  <div>
-                    <h2 className="text-2xl font-bold">Discounted Sale</h2>
-                    <p className="text-gray-600">20% discount off sales above $250</p>
-                  </div>
+              </div>
+              <div className="flex items-center">
+                <FaTag className="text-gray-600 mr-2" />
+                <div>
+                  <h2 className="text-2xl font-bold">Discounted Sale</h2>
+                  <p className="text-gray-600">20% discount off sales above $250</p>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
         {/* Frame 3 */}
         <section className="mt-10 bg-white p-10 rounded-lg shadow-md">
@@ -225,7 +206,7 @@ const Main = () => {
                       src={getImageUrl(product)}
                       alt={product.name}
                       className="w-full h-full object-cover cursor-pointer"
-                      onClick={() => handleImageClick(product)}
+                      onClick={() => handleProductClick(product)}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src =
@@ -240,7 +221,7 @@ const Main = () => {
                       </div>
                       <div className="self-end">
                         <button
-                          onClick={() => handleViewProduct(product)}
+                          onClick={() => handleProductClick(product)}
                           className="flex items-center bg-black text-white border border-transparent px-4 py-2 rounded-lg shadow-md hover:bg-white hover:text-black hover:border-black transition duration-300"
                         >
                           <FaEye className="mr-2" />
@@ -280,7 +261,7 @@ const Main = () => {
         {/* Frame 4 */}
         <section className="mt-10 bg-offwhite p-10 rounded-lg flex flex-col lg:flex-row items-center justify-between shadow-md">
           <div className="text-left">
-            <h2 className="text-3xl font-bold">Take advantage of the ongoing ‘Buy one Get One free’</h2>
+            <h2 className="text-3xl font-bold">Take advantage of the ongoing 'Buy one Get One free'</h2>
             <p className="mt-4 text-gray-600">Don't miss out on our incredible 'Buy One, Get One Free' offer! Double your style and savings with this limited-time deal</p>
             <button className="mt-6 px-6 py-2 bg-black text-white rounded-full">Buy now</button>
           </div>
@@ -296,7 +277,8 @@ const Main = () => {
             {dealOfDay.map((deal) => (
               <div
                 key={deal.id}
-                className="flex-shrink-0 w-64 sm:w-72 lg:w-full relative bg-white rounded-lg shadow-md"
+                className="flex-shrink-0 w-64 sm:w-72 lg:w-full relative bg-white rounded-lg shadow-md cursor-pointer"
+                onClick={() => handleProductClick(deal)}
               >
                 <div className="relative aspect-square overflow-hidden">
                   <img
@@ -310,11 +292,18 @@ const Main = () => {
                   >
                     <button
                       className="px-4 py-2 bg-black text-white rounded-full text-sm whitespace-nowrap"
-                      onClick={() => handleDealClick(deal)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDealClick(deal);
+                      }}
                     >
                       Get 50% OFF
                     </button>
                   </div>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-bold truncate">{deal.name}</h3>
+                  <p className="text-gray-600">${getPrice(deal)}</p>
                 </div>
               </div>
             ))}
@@ -331,19 +320,12 @@ const Main = () => {
               <p>{error}</p>
             ) : (
               <>
-                <div
-                  className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                  id="product-slider"
-                >
+                <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentProductsFrame7.map((product) => (
-                    <div
-                      key={product.id}
-                      className="relative cursor-pointer"
-                      onClick={() => handleProductClick(product.id)}
-                    >
-                      <img
-                        src={getImageUrl(product)}
-                        alt={product.name}
+                    <div key={product.id} className="relative cursor-pointer flex-shrink-0 w-full" onClick={() => handleProductClick(product)}>
+                      <img 
+                        src={`https://api.timbu.cloud/images/${product.photos[0]?.url}`}
+                        alt={product.name} 
                         className="w-full h-64 object-cover rounded-lg"
                       />
                       <button 
@@ -355,16 +337,25 @@ const Main = () => {
                       >
                         <FaHeart className="text-gray-600" />
                       </button>
-                      <div className="mt-2">
-                        <h3 className="text-lg font-bold truncate">{product.name}</h3>
-                        <div className="flex items-center justify-between mt-1">
-                          <p className="text-gray-600 font-semibold">
-                            ${getPrice(product)}
-                          </p>
-                          <div className="flex items-center">
-                            <FaStar className="text-yellow-500 w-4 h-4 mr-1" />
-                            <span className="text-sm text-gray-600">5.0 (100)</span>
+                      <div className="mt-2 flex justify-between">
+                        <div className="text-left">
+                          <h3 className="text-xl font-bold truncate">{product.name}</h3>
+                          <div className="flex items-center text-xs space-x-2">
+                            <p className="text-gray-600">${getPrice(product)}</p>
+                            {[...Array(5)].map((_, i) => (
+                              <FaStar key={i} className="text-yellow-500" />
+                            ))}
+                            <span className="text-gray-600">(100 reviews)</span>
                           </div>
+                        </div>
+                        <div className="flex items-center">
+                          <FaEye 
+                            className="text-gray-600 text-2xl cursor-pointer" 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewProduct(product);
+                            }}
+                          />
                         </div>
                       </div>
                     </div>
