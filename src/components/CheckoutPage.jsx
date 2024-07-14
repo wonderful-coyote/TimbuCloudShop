@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
-import Footer from './Footer';
+
 import { useCart } from './CartContext';
 
 const ScrollToTopOnMount = ({ children }) => {
@@ -275,7 +275,7 @@ const CheckoutPage = () => {
            </div>
          </main>
 
-         <Footer />
+         
        </div>
      </ScrollToTopOnMount>
   );

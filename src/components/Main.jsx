@@ -1,4 +1,3 @@
-//main.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -34,7 +33,7 @@ const Main = () => {
   // Frame 7 states
   const [allProducts, setAllProducts] = useState([]);
   const [currentPageFrame7, setCurrentPageFrame7] = useState(1);
-  const productsPerPageFrame7 = 12;
+  const productsPerPageFrame7 = 9; // Changed to 9 products per page
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -75,15 +74,12 @@ const Main = () => {
 
           // Set Deal of the Day for Frame 6
           const shuffledForDealOfDay = [...allProductsData].sort(
-            () => 0.5 - Math.random(),
+            () => 0.5 - Math.random()
           );
           setDealOfDay(shuffledForDealOfDay.slice(0, 3));
 
           // Set all products for Frame 7
-          const shuffledForFrame7 = [...allProductsData].sort(
-            () => 0.5 - Math.random(),
-          );
-          setAllProducts(shuffledForFrame7);
+          setAllProducts(allProductsData);
         } else {
           setError("Unexpected API response structure");
         }
@@ -102,8 +98,28 @@ const Main = () => {
     navigate("/product-page", { state: { product } });
   };
 
-  const handleViewProduct = (product) => {
-    navigate('/product-page', { state: { productId: product.id } });
+  const handleProductClick = async (productId) => {
+    try {
+      const response = await axios.get("https://api.timbu.cloud/products", {
+        params: {
+          organization_id: "58ddfc3dae284682a34786c6a0ef8ca8",
+          reverse_sort: false,
+          size: 30,
+          Appid: "XN6CWIWSNU9H02L",
+          Apikey: "8e878218ff9b4c7dbbd6bc0b9c57f13c20240713162028067521",
+        },
+      });
+
+      const productData = response.data.items.find(item => item.id === productId);
+
+      if (productData) {
+        navigate('/product-page', { state: { product: productData } });
+      } else {
+        console.error("Product not found");
+      }
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    }
   };
 
   const handleDealClick = (deal) => {
@@ -122,18 +138,14 @@ const Main = () => {
   const indexOfFirstProductFrame3 = indexOfLastProductFrame3 - productsPerPage;
   const currentProductsFrame3 = products.slice(
     indexOfFirstProductFrame3,
-    indexOfLastProductFrame3,
+    indexOfLastProductFrame3
   );
 
   // Pagination for Frame 7
   const paginateFrame7 = (pageNumber) => setCurrentPageFrame7(pageNumber);
   const indexOfLastProductFrame7 = currentPageFrame7 * productsPerPageFrame7;
-  const indexOfFirstProductFrame7 =
-    indexOfLastProductFrame7 - productsPerPageFrame7;
-  const currentProductsFrame7 = allProducts.slice(
-    indexOfFirstProductFrame7,
-    indexOfLastProductFrame7,
-  );
+  const indexOfFirstProductFrame7 = indexOfLastProductFrame7 - productsPerPageFrame7;
+  const currentProductsFrame7 = allProducts.slice(indexOfFirstProductFrame7, indexOfLastProductFrame7);
 
   const getImageUrl = (product) => {
     if (product.photos && product.photos.length > 0 && product.photos[0].url) {
@@ -145,7 +157,6 @@ const Main = () => {
   return (
     <ScrollToTopOnMount>
       <main className="p-4 sm:p-6 md:p-8 lg:p-10 max-w-7xl mx-auto">
-        
         {/* Frame 1 */}
         <section className="bg-white p-10 rounded-lg flex flex-col lg:flex-row items-center justify-between shadow-md">
           <div className="text-left">
@@ -266,6 +277,16 @@ const Main = () => {
           </div>
         </section>
 
+        {/* Frame 4 */}
+        <section className="mt-10 bg-offwhite p-10 rounded-lg flex flex-col lg:flex-row items-center justify-between shadow-md">
+          <div className="text-left">
+            <h2 className="text-3xl font-bold">Take advantage of the ongoing ‘Buy one Get One free’</h2>
+            <p className="mt-4 text-gray-600">Don't miss out on our incredible 'Buy One, Get One Free' offer! Double your style and savings with this limited-time deal</p>
+            <button className="mt-6 px-6 py-2 bg-black text-white rounded-full">Buy now</button>
+          </div>
+          <img src="./timbu/adbb9d9b9c2b5d72c5c9d2c28d23e0cd8bb747a7.png" alt="Promo" className="w-96 h-auto" />
+        </section>
+
         {/* Frame 6 */}
         <section className="mt-10 bg-offwhite p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg shadow-md overflow-hidden">
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">
@@ -311,83 +332,67 @@ const Main = () => {
             ) : (
               <>
                 <div
-                  className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                  className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                   id="product-slider"
                 >
                   {currentProductsFrame7.map((product) => (
                     <div
                       key={product.id}
-                      className="relative min-w-full md:min-w-0 cursor-pointer"
-                      onClick={() => handleImageClick(product)}
+                      className="relative cursor-pointer"
+                      onClick={() => handleProductClick(product.id)}
                     >
                       <img
                         src={getImageUrl(product)}
                         alt={product.name}
-                        className="w-full h-auto rounded-lg"
+                        className="w-full h-64 object-cover rounded-lg"
                       />
-                      <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
+                      <button 
+                        className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Add to favorites functionality here
+                        }}
+                      >
                         <FaHeart className="text-gray-600" />
                       </button>
-                      <div className="mt-2 flex justify-between">
-                        <div className="text-left">
-                          <h3 className="text-xl font-bold">{product.name}</h3>
-                          <div className="flex items-center text-xs space-x-2">
-                            <p className="text-gray-600">
-                              ${getPrice(product)}
-                            </p>
-                            <div className="flex">
-                              {[...Array(5)].map((_, i) => (
-                                <FaStar
-                                  key={i}
-                                  className="text-yellow-500 w-3 h-3"
-                                />
-                              ))}
-                            </div>
-                            <span className="text-gray-600">(100 reviews)</span>
+                      <div className="mt-2">
+                        <h3 className="text-lg font-bold truncate">{product.name}</h3>
+                        <div className="flex items-center justify-between mt-1">
+                          <p className="text-gray-600 font-semibold">
+                            ${getPrice(product)}
+                          </p>
+                          <div className="flex items-center">
+                            <FaStar className="text-yellow-500 w-4 h-4 mr-1" />
+                            <span className="text-sm text-gray-600">5.0 (100)</span>
                           </div>
-                        </div>
-                        <div className="flex items-center">
-                          <button
-                            onClick={(e) => {
-                              handleViewProduct(product);
-                            }}
-                            className="bg-black text-white p-2 rounded-full"
-                          >
-                            <FaEye />
-                          </button>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
-                
-                <div className="flex justify-center mt-4 space-x-2">
+
+                <div className="flex justify-center mt-8 space-x-2">
                   {Array.from(
-                    {
-                      length: Math.ceil(
-                        allProducts.length / productsPerPageFrame7,
-                      ),
-                    },
+                    { length: Math.ceil(allProducts.length / productsPerPageFrame7) },
                     (_, i) => (
                       <button
                         key={i}
                         className={`w-10 h-10 flex items-center justify-center rounded-full ${
                           currentPageFrame7 === i + 1
                             ? "bg-black text-white"
-                            : "bg-gray-200"
+                            : "bg-gray-200 text-gray-600 hover:bg-gray-300"
                         }`}
                         onClick={() => paginateFrame7(i + 1)}
                       >
                         {i + 1}
                       </button>
-                    ),
+                    )
                   )}
                 </div>
               </>
             )}
           </div>
         </section>
-
 
         {/* Frame 8 */}
         <section className="mt-10 bg-offwhite p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg shadow-md overflow-hidden">

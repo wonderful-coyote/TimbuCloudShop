@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaTrash, FaHeart, FaStar, FaEye, FaShoppingCart } from 'react-icons/fa';
 import Header from './Header';
-import Footer from './Footer';
+
 import { useCart } from './CartContext';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -266,7 +266,7 @@ const CartPage = () => {
         </section>
       </main>
 
-      <Footer />
+     
     </div>
   );
 };
