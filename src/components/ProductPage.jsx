@@ -7,6 +7,7 @@ import {
   FaShoppingCart,
   FaTruck,
   FaThumbsUp,
+  FaEye
 } from "react-icons/fa";
 import Header from "./Header";
 
@@ -35,7 +36,7 @@ const ProductPage = () => {
   const [showAllImages, setShowAllImages] = useState(false);
   const [discountedPrice, setDiscountedPrice] = useState(null);
   const { cart, addToCart } = useCart();
-
+  const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
 
@@ -69,6 +70,10 @@ const ProductPage = () => {
             const discounted = originalPrice * (1 - discountPercentage / 100);
             setDiscountedPrice(discounted.toFixed(2));
           }
+          // Select random products for the "Similar Items" section
+          const otherProducts = response.data.items.filter(item => item.id !== productId);
+          const shuffled = [...otherProducts].sort(() => 0.5 - Math.random());
+          setSelectedProducts(shuffled.slice(0, 3));
         } else {
           setError("Product not found");
         }
@@ -88,7 +93,28 @@ const ProductPage = () => {
     navigate(-1);
   };
 
-  // In ProductPage.jsx
+  const getPrice = (product) => {
+    if (product.current_price && Array.isArray(product.current_price) && product.current_price.length > 0) {
+      const priceObj = product.current_price[0];
+      const currency = Object.keys(priceObj)[0];
+      if (Array.isArray(priceObj[currency]) && priceObj[currency].length > 0) {
+        return priceObj[currency][0];
+      }
+    }
+    return "N/A";
+  };
+
+  const handleViewProduct = (product) => {
+    // First, navigate to the new product page
+    navigate('/product-page', { 
+      state: { productId: product.id },
+      replace: true // This replaces the current entry in the history stack
+    });
+
+    // Then, immediately scroll to the top of the page
+    window.scrollTo(0, 0);
+  };
+  
 
   const handleAddToCart = () => {
     if (selectedColor !== null && selectedSize !== null) {
@@ -444,7 +470,51 @@ const ProductPage = () => {
           )}
 
           {/* Frame 5: Other Products */}
-          {/* This section remains unchanged */}
+          {/* Similar items section */}
+          <section className="mt-10 bg-white p-10 rounded-lg shadow-md">
+            <h2 className="text-3xl font-bold text-center">We think you'll like these</h2>
+            {loading ? (
+              <p>Loading products...</p>
+            ) : error ? (
+              <p>{error}</p>
+            ) : (
+              <div className="mt-10 flex overflow-x-auto lg:grid lg:grid-cols-3 gap-4">
+                {selectedProducts.map((product) => (
+                  <div key={product.id} className="relative cursor-pointer flex-shrink-0 w-64 lg:w-auto" onClick={() => handleViewProduct(product)}>
+                    <img 
+                      src={`https://api.timbu.cloud/images/${product.photos[0]?.url}`} 
+                      alt={product.name} 
+                      className="w-full h-auto rounded-lg"
+                    />
+                    <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
+                      <FaHeart className="text-gray-600" />
+                    </button>
+                    <div className="mt-2 flex justify-between">
+                      <div className="text-left">
+                        <h3 className="text-xl font-bold">{product.name}</h3>
+                        <div className="flex items-center text-xs space-x-2">
+                          <p className="text-gray-600">${getPrice(product)}</p>
+                          {[...Array(5)].map((_, i) => (
+                            <FaStar key={i} className="text-yellow-500" />
+                          ))}
+                          <span className="text-gray-600">(100 reviews)</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        <FaEye 
+                          className="text-gray-600 text-2xl cursor-pointer" 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleViewProduct(product);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
         </main>
       </div>
     </ScrollToTopOnMount>

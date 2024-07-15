@@ -1,3 +1,4 @@
+//cartpage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaTrash, FaHeart, FaStar, FaEye, FaShoppingCart } from 'react-icons/fa';
@@ -98,7 +99,7 @@ const CartPage = () => {
       <Header />
       <ToastContainer />
 
-      <main className="p-5">
+      <main className="p-5 max-w-7xl mx-auto">
         <button 
           onClick={handleBackClick} 
           className="bg-gray-200 p-2 rounded hover:bg-gray-300 mb-4"
@@ -202,7 +203,7 @@ const CartPage = () => {
                   <h3 className="text-xl font-semibold mb-4">We Accept</h3>
                   <div className="grid grid-cols-3 gap-4">
                     <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded">Visa</button>
-                    <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded">MasterCard</button>
+                    <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded">Master Card</button>
                     <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded">American Express</button>
                     <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded">PayPal</button>
                     <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded">Google Pay</button>
